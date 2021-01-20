@@ -78,11 +78,11 @@ func PkgPack(pid uint16, tp Proto, v interface{}) ([]byte, error) {
 }
 
 // PkgEmpty can be used to create an empty package
-func PkgEmpty(pid uint16, tp Proto) ([]byte, error) {
+func PkgEmpty(pid uint16, tp Proto) []byte {
 	pkgdata := make([]byte, pkgHeaderSize, pkgHeaderSize)
 
 	// set package length.
-	binary.LittleEndian.PutUint32(pkgdata[0:], uint32(datasz))
+	binary.LittleEndian.PutUint32(pkgdata[0:], 0)
 
 	// set package pid.
 	binary.LittleEndian.PutUint16(pkgdata[4:], pid)

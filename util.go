@@ -70,26 +70,18 @@ func WriteEx(pid uint16, errCode Ex, errMsg string) {
 
 //WriteConfOk should be used when the module is successfully configured
 func WriteConfOk() {
-	data, err := PkgEmpty(0, ProtoModuleConfOk)
-	if err == nil {
-		_, err := os.Stdout.Write(data)
-		if err != nil {
-			log.Printf("Error writing to stdout: %s", err)
-		}
-	} else {
-		log.Printf("Error creating package from value: %v", v)
+	data := PkgEmpty(0, ProtoModuleConfOk)
+	_, err := os.Stdout.Write(data)
+	if err != nil {
+		log.Printf("Error writing to stdout: %s", err)
 	}
 }
 
 //WriteConfErr should be used when module configuration has failed
 func WriteConfErr() {
-	data, err := PkgEmpty(0, ProtoModuleConfErr)
-	if err == nil {
-		_, err := os.Stdout.Write(data)
-		if err != nil {
-			log.Printf("Error writing to stdout: %s", err)
-		}
-	} else {
-		log.Printf("Error creating package from value: %v", v)
+	data := PkgEmpty(0, ProtoModuleConfErr)
+	_, err := os.Stdout.Write(data)
+	if err != nil {
+		log.Printf("Error writing to stdout: %s", err)
 	}
 }
