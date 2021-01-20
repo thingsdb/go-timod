@@ -77,8 +77,8 @@ func PkgPack(pid uint16, tp Proto, v interface{}) ([]byte, error) {
 	return data, nil
 }
 
-// PkgPack returns a byte array containing a header with serialized data.
-func PkgPack(pid uint16, tp Proto) ([]byte, error) {
+// PkgEmpty can be used to create an empty package
+func PkgEmpty(pid uint16, tp Proto) ([]byte, error) {
 	pkgdata := make([]byte, pkgHeaderSize, pkgHeaderSize)
 
 	// set package length.

@@ -70,7 +70,7 @@ func WriteEx(pid uint16, errCode Ex, errMsg string) {
 
 //WriteConfOk should be used when the module is successfully configured
 func WriteConfOk() {
-	data, err := PkgPack(0, ProtoModuleConfOk)
+	data, err := PkgEmpty(0, ProtoModuleConfOk)
 	if err == nil {
 		_, err := os.Stdout.Write(data)
 		if err != nil {
@@ -83,7 +83,7 @@ func WriteConfOk() {
 
 //WriteConfErr should be used when module configuration has failed
 func WriteConfErr() {
-	data, err := PkgPack(0, ProtoModuleConfErr)
+	data, err := PkgEmpty(0, ProtoModuleConfErr)
 	if err == nil {
 		_, err := os.Stdout.Write(data)
 		if err != nil {
