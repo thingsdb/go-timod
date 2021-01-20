@@ -1,4 +1,4 @@
-module thingsdb/go-timod
+module github.com/thingsdb/go-timod
 
 go 1.15
 
