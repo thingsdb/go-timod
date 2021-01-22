@@ -20,100 +20,77 @@ If the module requires configuration data, for example a connection string, then
 
 Do not use functions like `Println` and `Printf` since these function will write to `stdout` and this is reserved for ThingsDB. Instead, use `log.Print..` to write to `stderr` instead.
 
-The following code may be used as a template:
+The following code may be used as a template: (see: https://github.com/thingsdb/ThingsDB/tree/master/modules/demo)
 
-```
+```go
 package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
-	"net/url"
-	timod "requests/timod"
+
+	timod "github.com/thingsdb/go-timod"
 
 	"github.com/vmihailenco/msgpack"
 )
-
-type reqData struct {
-	URL     string      `msgpack:"url"`
-	Method  string      `msgpack:"metohd"`
-	Body    []byte      `msgpack:"body"`
-	Headers [][2]string `msgpack:"headers"`
-	Params  [][2]string `msgpack:"params"`
-}
-
-func handleReqData(pkg *timod.Pkg, data *reqData) {
-
-	params := url.Values{}
-
-	reqURL, err := url.Parse(data.URL)
-	if err != nil {
-		timod.WriteEx(pkg.Pid, timod.ExBadData, fmt.Sprintf("failed to parse URL (%s)", err))
-		return
-	}
-
-	for i := 0; i < len(data.Params); i++ {
-		param := data.Params[i]
-		key, value := param[0], param[1]
-		params.Set(key, value)
-	}
-
-	reqURL.RawQuery = params.Encode()
-
-	req, err := http.NewRequest(data.Method, reqURL.String(), nil)
-	if err != nil {
-		timod.WriteEx(pkg.Pid, timod.ExBadData, fmt.Sprintf("failed to create HTTP request (%s)", err))
-		return
-	}
-
-	for i := 0; i < len(data.Headers); i++ {
-		header := data.Headers[i]
-		key, value := header[0], header[1]
-		req.Header.Set(key, value)
-	}
-
-	client := &http.Client{}
-	res, err := client.Do(req)
-	if err != nil {
-		timod.WriteEx(pkg.Pid, timod.ExBadData, fmt.Sprintf("failed to do the HTTP request (%s)", err))
-		return
-	}
-
-	_, err = ioutil.ReadAll(res.Body)
-	if err != nil {
-		timod.WriteEx(pkg.Pid, timod.ExBadData, fmt.Sprintf("failed to read bytes from HTTP response (%s)", err))
-		return
-	}
-
-	// timod.WriteResponse(pkg.Pid, &resBytes)
-}
-
-func onModuleReq(pkg *timod.Pkg) {
-	var data reqData
-
-	err := msgpack.Unmarshal(pkg.Data, &data)
-	if err == nil {
-		handleReqData(pkg, &data)
-	} else {
-		timod.WriteEx(pkg.Pid, timod.ExBadData, fmt.Sprintf("failed to unpack request (%s)", err))
-	}
-}
 
 func handler(buf *timod.Buffer, quit chan bool) {
 	for {
 		select {
 		case pkg := <-buf.PkgCh:
 			switch timod.Proto(pkg.Tp) {
-			case timod.ProtoModuleInit:
-				log.Println("No init required for this module")
+			case timod.ProtoModuleConf:
+				/*
+				 * Configuration data for this module is received from ThingsDB.
+				 *
+				 * The module should respond with:
+				 *
+				 * - timod.WriteConfOk(): if successful
+				 * - timod.WriteConfErr(): in case the configuration has failed
+				 */
+				log.Println("No configuration data is required for this module")
+				timod.WriteConfOk() // Just write OK
+
 			case timod.ProtoModuleReq:
-				onModuleReq(pkg)
+				/*
+				 * A request from ThingsDB may be unpacked to a struct or to
+				 * an map[string]interface{}.
+				 *
+				 * The module should respond with:
+				 *
+				 * - timod.WriteResponse(pid, value): if successful
+				 * - timod.WriteEx(pid, err_code, err_msg): in case of an error
+				 */
+				type Demo struct {
+					Message string `msgpack:"message"`
+				}
+				var demo Demo
+
+				// pkg.Data contains Message Packed data, most likely you want
+				// to unpack the data into a struct.
+				err := msgpack.Unmarshal(pkg.Data, &demo)
+				if err == nil {
+					/*
+					 * In this demo a `message` property will be unpacked and
+					 * used as a return value.
+					 */
+					timod.WriteResponse(pkg.Pid, &demo.Message)
+				} else {
+					/*
+					 * In case of an error, make sure to call `WriteEx(..)` so ThingsDB
+					 * can finish the future request with an appropriate error.
+					 */
+					timod.WriteEx(pkg.Pid, timod.ExBadData, fmt.Sprintf("failed to unpack request (%s)", err))
+				}
+
 			default:
 				log.Printf("Error: Unexpected package type: %d", pkg.Tp)
 			}
 		case err := <-buf.ErrCh:
+			/*
+			 * In case of an error you probably want to quit the module.
+			 * ThingsDB will try to restart the module a few times if this happens.
+			 */
 			log.Printf("Error: %s", err)
 			quit <- true
 			return
@@ -122,8 +99,10 @@ func handler(buf *timod.Buffer, quit chan bool) {
 }
 
 func main() {
-    // Starts the module
+	// Starts the module
 	timod.StartModule("demo", handler)
-}
 
+	// It is possible to add some cleanup code here
+}
 ```
+
