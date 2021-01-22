@@ -34,7 +34,6 @@ func StartModule(name string, handler func(*Buffer, chan bool)) {
 
 	go handler(buf, quit)
 	<-quit
-
 }
 
 //WriteResponse can be used to write a response

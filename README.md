@@ -93,7 +93,6 @@ func handler(buf *timod.Buffer, quit chan bool) {
 			 */
 			log.Printf("Error: %s", err)
 			quit <- true
-			return
 		}
 	}
 }
