@@ -79,7 +79,7 @@ func handler(buf *timod.Buffer, quit chan bool) {
                     /*
                      * In case of an error, make sure to call `WriteEx(..)` so
                      * ThingsDB can finish the future request with an
-                     * appropriate error.
+                     * appropriate error. (see error codes below)
                      */
                     timod.WriteEx(
                         pkg.Pid,
@@ -110,3 +110,24 @@ func main() {
 }
 ```
 
+## Exceptions
+
+These are the possible exceptions which may be used. Do not any other values
+as ThingsDB will only accept values withing this range.
+
+- `ExCancelled` - operation is cancelled before completion
+- `ExOperation` - operation is not valid in the current context
+- `ExNumArguments` - wrong number of arguments
+- `ExTypeError` - object of inappropriate type
+- `ExValueError` - object has the right type but an inappropriate value
+- `ExOverflow` - integer overflow
+- `ExZeroDiv` - division or module by zero
+- `ExMaxQuota` - max quota is reached
+- `ExAuthError` - authentication error
+- `ExForbidden` - forbidden (access denied)
+- `ExLookupError` - requested resource not found
+- `ExBadData` - unable to handle request due to invalid data
+- `ExSyntaxError` - syntax error in query
+- `ExNodeError` - node is temporary unable to handle the request
+- `ExAssertError` - assertion statement has failed
+- `ExCustom100`..`ExCustom127` - can be used as a custom errors
