@@ -112,8 +112,8 @@ func main() {
 
 ## Exceptions
 
-These are the possible exceptions which may be used. Do not any other values
-as ThingsDB will only accept values withing this range.
+These are the possible exceptions which may be used. Do not use any other
+exception code, as ThingsDB will only accept values withing the given range.
 
 - `ExCancelled` - operation is cancelled before completion
 - `ExOperation` - operation is not valid in the current context
