@@ -41,13 +41,13 @@ const (
 	ExBadData Ex = -53
 
 	//ExSyntaxError - syntax error in query
-	ExSyntaxError = -52
+	ExSyntaxError Ex = -52
 
 	//ExNodeError - node is temporary unable to handle the request
-	ExNodeError = -51
+	ExNodeError Ex = -51
 
 	//ExAssertError - assertion statement has failed
-	ExAssertError = -50
+	ExAssertError Ex = -50
 
 	//ExCustom127 can be used as a custom error
 	ExCustom127 Ex = -127
