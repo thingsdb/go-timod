@@ -20,7 +20,7 @@ If the module requires configuration data, for example a connection string, then
 
 Do not use functions like `Println` and `Printf` since these function will write to `stdout` and this is reserved for ThingsDB. Instead, use `log.Print..` to write to `stderr` instead.
 
-The following code may be used as a template: (see: https://github.com/thingsdb/ThingsDB/tree/master/modules/demo)
+The following code may be used as a template: (see: https://github.com/thingsdb/ThingsDB/tree/master/modules/go/demo)
 
 ```go
 package main
