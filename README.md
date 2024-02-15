@@ -57,6 +57,9 @@ func handler(buf *timod.Buffer, quit chan bool) {
                 //
                 // - timod.WriteResponse(pid, value): if successful
                 // - timod.WriteEx(pid, err_code, err_msg): in case of an error
+                //
+                // (alternative to WriteResponse, WriteResponseRaw is available
+                //  for a pre-packed, raw response)
                 type Demo struct {
                     Message string `msgpack:"message"`
                 }

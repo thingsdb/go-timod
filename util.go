@@ -8,7 +8,7 @@ import (
 	"syscall"
 )
 
-//StartModule can be used to start the module
+// StartModule can be used to start the module
 func StartModule(name string, handler func(*Buffer, chan bool)) {
 	// Setup log module
 	log.SetPrefix(fmt.Sprintf("[%s] ", name))
@@ -36,11 +36,11 @@ func StartModule(name string, handler func(*Buffer, chan bool)) {
 	<-quit
 }
 
-//WriteResponse can be used to write a response
+// WriteResponse can be used to write a response
 func WriteResponse(pid uint16, v interface{}) {
-	data, err := PkgPack(pid, ProtoModuleRes, &v)
+	pkg, err := PkgPack(pid, ProtoModuleRes, &v)
 	if err == nil {
-		_, err := os.Stdout.Write(data)
+		_, err := os.Stdout.Write(pkg)
 		if err != nil {
 			log.Printf("Error writing to stdout: %s", err)
 		}
@@ -49,7 +49,16 @@ func WriteResponse(pid uint16, v interface{}) {
 	}
 }
 
-//WriteEx can be used to write an error response
+// WriteResponseRaw can be used to write a raw response
+func WriteResponseRaw(pid uint16, data []byte) {
+	pkg := PkgPackBin(pid, ProtoModuleRes, data)
+	_, err := os.Stdout.Write(pkg)
+	if err != nil {
+		log.Printf("Error writing to stdout: %s", err)
+	}
+}
+
+// WriteEx can be used to write an error response
 func WriteEx(pid uint16, errCode Ex, errMsg string) {
 	var errArr [2]interface{}
 
@@ -67,7 +76,7 @@ func WriteEx(pid uint16, errCode Ex, errMsg string) {
 	}
 }
 
-//WriteConfOk should be used when the module is successfully configured
+// WriteConfOk should be used when the module is successfully configured
 func WriteConfOk() {
 	data := PkgEmpty(0, ProtoModuleConfOk)
 	_, err := os.Stdout.Write(data)
@@ -76,7 +85,7 @@ func WriteConfOk() {
 	}
 }
 
-//WriteConfErr should be used when module configuration has failed
+// WriteConfErr should be used when module configuration has failed
 func WriteConfErr() {
 	data := PkgEmpty(0, ProtoModuleConfErr)
 	_, err := os.Stdout.Write(data)

@@ -1,4 +1,4 @@
 package timod
 
-//Version exposes the version of this library
-const Version = "0.0.2"
+// Version exposes the version of this library
+const Version = "0.0.3"

@@ -10,9 +10,6 @@ import (
 // pkgHeaderSize is the size of a package header.
 const pkgHeaderSize = 8
 
-// PkgInitCapacity will be used as default capacity when allocating for a package.
-const pkgInitCapacity = 8192
-
 // Pkg contains of a header and data.
 type Pkg struct {
 	Size uint32
@@ -73,13 +70,12 @@ func PkgPack(pid uint16, tp Proto, v interface{}) ([]byte, error) {
 	}
 
 	data = PkgPackBin(pid, tp, data)
-
 	return data, nil
 }
 
 // PkgEmpty can be used to create an empty package
 func PkgEmpty(pid uint16, tp Proto) []byte {
-	pkgdata := make([]byte, pkgHeaderSize, pkgHeaderSize)
+	pkgdata := make([]byte, pkgHeaderSize)
 
 	// set package length.
 	binary.LittleEndian.PutUint32(pkgdata[0:], 0)
