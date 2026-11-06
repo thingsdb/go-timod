@@ -62,7 +62,7 @@ func PkgPackBin(pid uint16, tp Proto, data []byte) []byte {
 }
 
 // PkgPack returns a byte array containing a header with serialized data.
-func PkgPack(pid uint16, tp Proto, v interface{}) ([]byte, error) {
+func PkgPack(pid uint16, tp Proto, v any) ([]byte, error) {
 
 	data, err := msgpack.Marshal(v)
 	if err != nil {

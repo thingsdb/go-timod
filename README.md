@@ -51,7 +51,7 @@ func handler(buf *timod.Buffer, quit chan bool) {
 
             case timod.ProtoModuleReq:
                 // A request from ThingsDB may be unpacked to a struct or to
-                // an map[string]interface{}.
+                // an map[string]any.
                 //
                 // The module should respond with:
                 //

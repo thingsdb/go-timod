@@ -37,7 +37,7 @@ func StartModule(name string, handler func(*Buffer, chan bool)) {
 }
 
 // WriteResponse can be used to write a response
-func WriteResponse(pid uint16, v interface{}) {
+func WriteResponse(pid uint16, v any) {
 	pkg, err := PkgPack(pid, ProtoModuleRes, &v)
 	if err == nil {
 		_, err := os.Stdout.Write(pkg)
@@ -60,7 +60,7 @@ func WriteResponseRaw(pid uint16, data []byte) {
 
 // WriteEx can be used to write an error response
 func WriteEx(pid uint16, errCode Ex, errMsg string) {
-	var errArr [2]interface{}
+	var errArr [2]any
 
 	errArr[0] = errCode
 	errArr[1] = errMsg
