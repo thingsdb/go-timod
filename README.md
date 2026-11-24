@@ -32,7 +32,7 @@ import (
     "fmt"
     "log"
 
-    timod "github.com/thingsdb/go-timod"
+    timod "github.com/thingsdb/go-timod/v2"
 
     "github.com/vmihailenco/msgpack"
 )
