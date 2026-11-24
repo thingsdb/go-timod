@@ -1,4 +1,4 @@
-module github.com/thingsdb/go-timod
+module github.com/thingsdb/go-timod/v2
 
 go 1.23
 
