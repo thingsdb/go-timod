@@ -1,3 +1,6 @@
+[![CI](https://github.com/thingsdb/go-timod/workflows/CI/badge.svg)](https://github.com/thingsdb/go-timod/actions)
+[![Release Version](https://img.shields.io/github/release/thingsdb/go-timod)](https://github.com/thingsdb/go-timod/releases)
+
 # timod
 
 Library for creating ThingsDB modules using the Go language
