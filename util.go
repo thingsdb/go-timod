@@ -85,11 +85,24 @@ func WriteConfOk() {
 	}
 }
 
-// WriteConfErr should be used when module configuration has failed
-func WriteConfErr() {
-	data := PkgEmpty(0, ProtoModuleConfErr)
-	_, err := os.Stdout.Write(data)
-	if err != nil {
-		log.Printf("Error writing to stdout: %s", err)
+// WriteConfErr marks the module as having a configuration error in ThingsDB.
+// If err is non-nil, its message is attached as the configuration error; if nil,
+// any previous error message is cleared while keeping the error state.
+func WriteConfErr(err error) {
+	var data []byte
+
+	if err == nil {
+		data = PkgEmpty(0, ProtoModuleConfErr)
+	} else {
+		var e error
+		if data, e = PkgPack(0, ProtoModuleConfErr, err.Error()); e != nil {
+			log.Printf("Failed to pack configuration error (%v): %v", err, e)
+			return
+		}
+	}
+
+	_, e := os.Stdout.Write(data)
+	if e != nil {
+		log.Printf("Error writing to stdout: %s", e)
 	}
 }
