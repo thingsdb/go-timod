@@ -1,7 +1,7 @@
 [![CI](https://github.com/thingsdb/go-timod/workflows/golangci-lint/badge.svg)](https://github.com/thingsdb/go-timod/actions)
 [![Release Version](https://img.shields.io/github/release/thingsdb/go-timod)](https://github.com/thingsdb/go-timod/releases)
 
-# timod
+# go-timod/v2
 
 Library for creating ThingsDB modules using the Go language
 
@@ -10,7 +10,7 @@ Library for creating ThingsDB modules using the Go language
 Simple install the package to your [$GOPATH](https://github.com/golang/go/wiki/GOPATH) with the [go tool](https://golang.org/cmd/go/) from shell:
 
 ```shell
-$ go get github.com/thingsdb/go-timod
+$ go get github.com/thingsdb/go-timod/v2
 ```
 
 Make sure [Git](https://git-scm.com/downloads) is installed on your machine and in your system's PATH.
