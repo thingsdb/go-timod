@@ -8,6 +8,9 @@ import (
 	"syscall"
 )
 
+// NilBytes represents MessagePack `nil`
+var NilBytes = []byte{0xc0}
+
 // StartModule can be used to start the module
 func StartModule(name string, handler func(*Buffer, chan bool)) {
 	// Setup log module
@@ -52,6 +55,15 @@ func WriteResponse(pid uint16, v any) {
 // WriteResponseRaw can be used to write a raw response
 func WriteResponseRaw(pid uint16, data []byte) {
 	pkg := PkgPackBin(pid, ProtoModuleRes, data)
+	_, err := os.Stdout.Write(pkg)
+	if err != nil {
+		log.Printf("Error writing to stdout: %s", err)
+	}
+}
+
+// WriteResponseNil can be used to write a nil response
+func WriteResponseNil(pid uint16) {
+	pkg := PkgPackBin(pid, ProtoModuleRes, NilBytes)
 	_, err := os.Stdout.Write(pkg)
 	if err != nil {
 		log.Printf("Error writing to stdout: %s", err)
